@@ -1,0 +1,14 @@
+h2 Alla dina todos #{session[:id]}!
+
+ol
+    - todos.each do |todo|
+        li
+            p = todo["content"]
+            a href="todos/#{todo['id']}/edit"  Uppdatera
+            form method="POST" action="todos/#{todo['id']}/delete" 
+                input type="submit" value="Klar"
+
+form action="/todos/new" method="post"
+    input type="text" name="content" placeholder="Att göra"
+    input type="hidden" name="user_id" value="#{session[:id]}" placeholder="Användar-id"
+    input type="submit" value="Skapa todo"
