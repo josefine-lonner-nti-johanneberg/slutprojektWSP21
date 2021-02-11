@@ -7,15 +7,28 @@ require 'bcrypt'
 enable :sessions
 
 get('/') do
-  slim(:start)
+  slim(:login)
+end
+
+post('/login') do
+  mail = params[:mail]
+  password = params[:password]
+  db = SQLite3::Database.new("db/todo2021.db")
+  db.results_as_hash = true
+  result = db.execute("SELECT * FROM users WHERE username = ?",username).first
+  pwdigest = result["pwdigest"]
+  id = result["id"]
+
+  if BCrypt::Password.new(pwdigest) == password
+    session[:id] = id
+    redirect('/annonser')
+  else
+    "Fel lösenord!"
+  end
 end
 
 get('/register') do
   slim(:register)
-end
-
-get('/showlogin') do
-  slim(:login)
 end
 
 post('/user/new') do
@@ -32,23 +45,6 @@ post('/user/new') do
   else
     
     "Lösenorden matchade inte!"
-  end
-end
-
-post('/login') do
-  username = params[:username]
-  password = params[:password]
-  db = SQLite3::Database.new("db/todo2021.db")
-  db.results_as_hash = true
-  result = db.execute("SELECT * FROM users WHERE username = ?",username).first
-  pwdigest = result["pwdigest"]
-  id = result["id"]
-
-  if BCrypt::Password.new(pwdigest) == password
-    session[:id] = id
-    redirect('/todos')
-  else
-    "Fel lösenord!"
   end
 end
 
