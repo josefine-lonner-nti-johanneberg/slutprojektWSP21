@@ -1,14 +1,14 @@
 h2 Alla annonser #{session[:id]}!
 
 ol
-    - todos.each do |todo|
+    - annonser.each do |annons|
         li
-            p = todo["content"]
-            a href="todos/#{todo['id']}/edit"  Uppdatera
-            form method="POST" action="todos/#{todo['id']}/delete" 
+            p = annons["content"]
+            a href="annons/#{annons['id']}/edit"  Uppdatera
+            form method="POST" action="annons/#{annons['id']}/delete" 
                 input type="submit" value="Klar"
 
-form action="/todos/new" method="post"
-    input type="text" name="content" placeholder="Att göra"
+form action="/annons/new" method="post"
+    input type="text" name="content" placeholder="Skapa ny annons"
     input type="hidden" name="user_id" value="#{session[:id]}" placeholder="Användar-id"
-    input type="submit" value="Skapa todo"
+    input type="submit" value="lägg upp annons"
