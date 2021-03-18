@@ -1,0 +1,14 @@
+h2 Alla Annonser #{session[:ad_id]}!
+
+ol
+    - ads.each do |ad|
+        li
+            p = ad["content"]
+            a href="ad/#{ad['ad_id']}/edit"  Uppdatera
+            form method="POST" action="ad/#{ad['ad_id']}/delete" 
+                input type="submit" value="Klar"
+
+form action="/ads/new" method="post"
+    input type="text" name="content" placeholder="Skapa ny annons"
+    input type="hidden" name="user_id" value="#{session[:user_id]}" placeholder="Användar-id"
+    input type="submit" value="lägg upp annons"

@@ -17,11 +17,11 @@ post('/login') do
   db.results_as_hash = true
   result = db.execute("SELECT * FROM users WHERE name = ?",name).first
   password = result["password"]
-  id = result["id"]
+  user_id = result["user_id"]
 
   if BCrypt::Password.new(password) == password
-    session[:id] = id
-    redirect('/annonser')
+    session[:user_id] = user_id
+    redirect('/ads')
   else
     "Fel lösenord!"
   end
@@ -42,51 +42,51 @@ post('/user/new') do
     password_digest = BCrypt::Password.create(password)
     db = SQLite3::Database.new("db/Trademarket.db")
     db.execute("INSERT INTO users (name,mail,password) VALUES (?,?,?)",name,mail,password_digest)
-    redirect('/annonser')
+    redirect('/ads')
   else
     
     "Lösenorden matchade inte!"
   end
 end
 
-get('/annonser') do
-  id = session[:id].to_i
+get('/ads') do
+  ad_id = session[:ad_id].to_i
   db = SQLite3::Database.new("db/Trademarket.db")
   db.results_as_hash = true
-  result = db.execute("SELECT * FROM annonser WHERE user_id = ?",user_id)
-  slim(:"annonser/index",locals:{annonser:result})
+  result = db.execute("SELECT * FROM ads WHERE ad_id = ?",ad_id)
+  slim(:"ads/index",locals:{ads:result})
 end
 
-post('/annonser/new') do
+post('/ads/new') do
   item = params[:item]
   user_id = params[:user_id]
   db = SQLite3::Database.new("db/Trademarket.db")
   db.execute("INSERT INTO annonser (item,user_id) VALUES (?,?)",item,user_id)
-  redirect('/annonser')
+  redirect('/ads')
 end
 
-post('/annonser/:id/delete') do
-  id = params[:id].to_i
+post('/ads/:id/delete') do
+  ad_id = params[:ad_id].to_i
   db = SQLite3::Database.new("db/Trademarket.db")
-  db.execute("DELETE FROM annonser WHERE annons_id = ?",annons_id)
-  redirect('/todos')
+  db.execute("DELETE FROM ads WHERE ad_id = ?",ad_id)
+  redirect('/ads')
 end
 
-post('/annonser/:id/update') do
-  annons_id = params[:annons_id].to_i
+post('/ads/:id/update') do
+  ad_id = params[:ad_id].to_i
   item = params[:item]
 
   db = SQLite3::Database.new("db/Trademarket.db")
-  db.execute("UPDATE annonser SET item = ? where annons_id = ?",item,annons_id)
-  redirect('/annonser')
+  db.execute("UPDATE ads SET item = ? where ad_id = ?",item,ad_id)
+  redirect('/ads')
 end
 
-get('/annonser/:id/edit') do
-  annons_id = params[:annons_id].to_i
+get('/ads/:id/edit') do
+  ad_id = params[:ad_id].to_i
   db = SQLite3::Database.new("db/Trademarket.db")
   db.results_as_hash = true
-  result = db.execute("SELECT * FROM annonser WHERE id = ?",annons_id).first
+  result = db.execute("SELECT * FROM ads WHERE id = ?",ad_id).first
   p "result är #{result}"
-  slim(:"/annonser/edit", locals:{result:result})
+  slim(:"/ads/edit", locals:{result:result})
 end
 
