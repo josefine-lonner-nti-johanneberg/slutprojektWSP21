@@ -7,7 +7,7 @@ require 'bcrypt'
 enable :sessions
 
 get('/') do
-  slim(:login)
+  slim(:"users/login")
 end
 
 post('/login') do
@@ -28,11 +28,12 @@ post('/login') do
 end
 
 get('/register') do
-  slim(:register)
+  slim(:"users/register")
 end
 
 post('/user/new') do
   name = params[:name]
+  mail = params[:mail]
   password = params[:password]
   password_confirm = params[:password_confirm]
 
