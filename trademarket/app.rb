@@ -15,7 +15,7 @@ post('/login') do
   password = params[:password]
   db = SQLite3::Database.new("db/Trademarket.db")
   db.results_as_hash = true
-  result = db.execute("SELECT * FROM users WHERE name = ?",name).first
+  result = db.execute("SELECT * FROM users WHERE mail = ?",mail).first
   password = result["password"]
   user_id = result["user_id"]
 
