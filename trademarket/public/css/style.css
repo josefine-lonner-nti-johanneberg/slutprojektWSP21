@@ -1,12 +1,36 @@
+body {
+  grid-template-areas:
+  'header header header'
+  'nav nav nav'
+  'main main main'
+  'footer footer footer'
+}
+
+header {
+  font-family: ;
+
+}
 nav {
   font-family: Arial, Helvetica, sans-serif;
   text-transform: uppercase;
   text-decoration: none;
   font-size: 1.2em;
   font-weight:800;
-  background: rgb(122, 255, 204);
+  background: rgb(203, 243, 228);
   height: 10vh;
   display:flex;
   justify-content:space-around;
   align-items:center;
+  box-shadow: 1px 3px rgb(236, 236, 236);
+  }
+
+a:link {
+  text-decoration: none;
+  color: black;
 }
+
+a:hover {
+  text-decoration: underline;
+  color: rgb(255, 98, 87);
+}
+
