@@ -1,4 +1,6 @@
 body {
+  margin: 0px;
+  display: grid;
   grid-template-areas:
   'hd hd hd'
   'nv nv nv'

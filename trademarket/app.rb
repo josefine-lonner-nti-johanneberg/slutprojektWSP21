@@ -7,21 +7,25 @@ require 'bcrypt'
 enable :sessions
 
 get('/') do
+  slim(:"ads/index")
+end
+
+get('/login') do
   slim(:"users/login")
 end
 
 post('/login') do
   mail = params[:mail]
-  password = params[:password]
+  password_form = params[:password]
   db = SQLite3::Database.new("db/Trademarket.db")
   db.results_as_hash = true
   result = db.execute("SELECT * FROM users WHERE mail = ?",mail).first
-  password = result["password"]
-  user_id = result["user_id"]
+  password_db = result["password"]
+  id = result["id"]
 
-  if BCrypt::Password.new(password) == password
-    session[:user_id] = user_id
-    redirect('/ads')
+  if BCrypt::Password.new(password_db) == password_form
+    session[:id] = id
+    redirect('/profile')
   else
     "Fel lösenord!"
   end
@@ -50,14 +54,18 @@ post('/user/new') do
 end
 
 get('/ads') do
+  slim(:"ads/index")
+end
+
+get('/profile') do
   ad_id = session[:ad_id].to_i
   db = SQLite3::Database.new("db/Trademarket.db")
   db.results_as_hash = true
   result = db.execute("SELECT * FROM ads WHERE ad_id = ?",ad_id)
-  slim(:"ads/index",locals:{ads:result})
+  slim(:"ads/profile", locals:{ads:result})
 end
 
-post('/ads/new') do
+post('/profile/new') do
   item = params[:item]
   user_id = params[:user_id]
   db = SQLite3::Database.new("db/Trademarket.db")
@@ -65,23 +73,22 @@ post('/ads/new') do
   redirect('/ads')
 end
 
-post('/ads/:id/delete') do
+post('/profile/:id/delete') do
   ad_id = params[:ad_id].to_i
   db = SQLite3::Database.new("db/Trademarket.db")
   db.execute("DELETE FROM ads WHERE ad_id = ?",ad_id)
   redirect('/ads')
 end
 
-post('/ads/:id/update') do
+post('/profile/:id/update') do
   ad_id = params[:ad_id].to_i
   item = params[:item]
-
   db = SQLite3::Database.new("db/Trademarket.db")
   db.execute("UPDATE ads SET item = ? where ad_id = ?",item,ad_id)
   redirect('/ads')
 end
 
-get('/ads/:id/edit') do
+get('/profile/:id/edit') do
   ad_id = params[:ad_id].to_i
   db = SQLite3::Database.new("db/Trademarket.db")
   db.results_as_hash = true

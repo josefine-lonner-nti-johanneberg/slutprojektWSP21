@@ -1,0 +1,12 @@
+ol
+    - ads.each do |item|
+        li
+            p = item["content"]
+            a href="item/#{item['ad_id']}/edit"  Uppdatera
+            form method="POST" action="item/#{item['ad_id']}/delete" 
+                input type="submit" value="Klar"
+
+form action="/profile/new" method="post"
+    input type="text" name="item" placeholder="Skapa ny annons"
+    input type="hidden" name="user_id" value="#{session[:user_id]}" placeholder="Användar-id"
+    input type="submit" value="lägg upp annons"
