@@ -67,9 +67,9 @@ end
 
 post('/profile/new') do
   item = params[:item]
-  user_id = params[:user_id]
+  ad_id = params[:ad_id]
   db = SQLite3::Database.new("db/Trademarket.db")
-  db.execute("INSERT INTO ads (item,user_id) VALUES (?,?)",item,user_id)
+  db.execute("INSERT INTO ads (item,ad_id) VALUES (?,?)",item,ad_id)
   redirect('/ads')
 end
 
